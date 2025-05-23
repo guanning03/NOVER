@@ -129,6 +129,7 @@ If you find this work useful, please cite our paper:
 
 ## Todo
 - [x] init for training code
+- [ ] upgrade to trl 0.17.0
 - [ ] cleaned NOVER data
 - [ ] support easier SFT data import
 - [ ] support inverse incentive training
