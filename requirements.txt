@@ -1,0 +1,16 @@
+transformers>=4.46.0
+trl==0.16.0
+accelerate
+datasets
+rich
+nvitop
+wandb
+peft
+fastapi
+uvicorn
+vllm
+flash-attn
+deepspeed
+timeout_decorator
+matplotlib
+Levenshtein
