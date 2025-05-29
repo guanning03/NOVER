@@ -1,7 +1,7 @@
 import os
 from typing import Optional, Tuple, Dict, Any
 from datasets import Dataset, load_from_disk, load_dataset
-from config import DATASET_NAME, DATASET_SUBSET, get_dataset_path
+from config import DATASET_NAME, DATASET_SUBSET, get_dataset_path, INTERMEDIATE_TAG, FINAL_TAG
 
 def load_dataset(
     dataset_name: str = DATASET_NAME,
@@ -72,7 +72,9 @@ def format_sft_dataset(
     reference_column: str = "reference",
     output_dir: Optional[str] = None,
     cache_dir: Optional[str] = None,
-    split: str = "train"
+    split: str = "train",
+    intermediate_tag: Optional[str] = None,
+    final_tag: Optional[str] = None
 ) -> str:
     """
     Format any SFT dataset (HF/CSV/JSONL) for NOVER training.
@@ -84,10 +86,17 @@ def format_sft_dataset(
         output_dir: Directory to save formatted dataset
         cache_dir: Cache directory for HF datasets
         split: Dataset split to use
+        intermediate_tag: Custom intermediate tag (defaults to config.INTERMEDIATE_TAG)
+        final_tag: Custom final tag (defaults to config.FINAL_TAG)
         
     Returns:
         Path to the formatted dataset
     """
+    if intermediate_tag is None:
+        intermediate_tag = INTERMEDIATE_TAG
+    if final_tag is None:
+        final_tag = FINAL_TAG
+        
     # Determine if it's a local file or HF dataset
     is_local_file = os.path.exists(dataset_source)
     
@@ -119,13 +128,13 @@ def format_sft_dataset(
 
 Answer the question and return in the following format:
 
-<think>
+<{intermediate_tag}>
 ...
-</think>
+</{intermediate_tag}>
 
-<answer>
+<{final_tag}>
 ...
-</answer>
+</{final_tag}>
 """
         return {
             "prompt": formatted_prompt,

@@ -21,6 +21,10 @@ DATASET_SUBSET = None
 HF_HOME = os.environ.get("HF_HOME", "YOUR_HF_HOME")
 VALIDATION_SIZE = 0
 
+# Tag settings - default tags can be overridden
+INTERMEDIATE_TAG = "think"
+FINAL_TAG = "answer"
+
 # Model settings
 MODEL_NAME_VLLM = "YOUR_MODEL_NAME_VLLM"
 MODEL_NAME = "YOUR_MODEL_NAME"

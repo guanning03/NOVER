@@ -71,6 +71,20 @@ For convenience, you can use the included dataset formatter to automatically for
 ./format_dataset.sh data.jsonl --prompt-column input --reference-column output
 ```
 
+#### Using Custom Tags
+
+NOVER now supports custom intermediate and final tags beyond the default `<think>` and `<answer>` tags. This allows you to adapt the system to different incentivived abilities and task types, for example:
+
+```bash
+# Format dataset with custom tags
+./format_dataset.sh data.jsonl --intermediate-tag role_play --final-tag story
+
+# Start training with custom tags
+./run_training.sh --intermediate-tag role_play --final-tag story
+```
+
+You can also set default tags in `config.py` by modifying the `INTERMEDIATE_TAG` and `FINAL_TAG` variables. This feature enables flexibility in how models express their reasoning process and final answers.
+
 ### Step 2: Weights & Biases Setup
 
 Set up your Weights & Biases credentials:
@@ -142,8 +156,9 @@ If you find this work useful, please cite our paper:
 
 ## Todo
 - [x] init for training code
+- [x] support easier SFT data import
+- [x] support custom tags
 - [ ] upgrade to trl 0.17.0
 - [ ] cleaned NOVER data
-- [x] support easier SFT data import
 - [ ] support inverse incentive training
 - [ ] support incentive steering

@@ -3,7 +3,7 @@ import argparse
 import os
 import sys
 from data_loader import format_sft_dataset
-from config import HF_HOME, get_dataset_path
+from config import HF_HOME, get_dataset_path, INTERMEDIATE_TAG, FINAL_TAG
 
 def main():
     parser = argparse.ArgumentParser(description="Format any SFT dataset for NOVER training")
@@ -49,6 +49,20 @@ def main():
         help="Dataset split to use"
     )
     
+    parser.add_argument(
+        "--intermediate-tag",
+        type=str,
+        default=INTERMEDIATE_TAG,
+        help=f"Custom intermediate tag (default: {INTERMEDIATE_TAG})"
+    )
+    
+    parser.add_argument(
+        "--final-tag",
+        type=str,
+        default=FINAL_TAG,
+        help=f"Custom final tag (default: {FINAL_TAG})"
+    )
+    
     args = parser.parse_args()
     
     # Derive dataset name from source if not provided
@@ -65,6 +79,8 @@ def main():
     print(f"Formatting dataset from: {args.dataset_source}")
     print(f"Using prompt column: {args.prompt_column}")
     print(f"Using reference column: {args.reference_column}")
+    print(f"Using intermediate tag: <{args.intermediate_tag}>")
+    print(f"Using final tag: <{args.final_tag}>")
     
     try:
         # Format and save the dataset
@@ -73,12 +89,16 @@ def main():
             prompt_column=args.prompt_column,
             reference_column=args.reference_column,
             output_dir=args.output_dir,
-            split=args.split
+            split=args.split,
+            intermediate_tag=args.intermediate_tag,
+            final_tag=args.final_tag
         )
         
         print(f"Dataset successfully formatted and saved to: {dataset_path}")
         print("\nTo use this dataset for NOVER training, update your config.py:")
         print(f'DATASET_NAME = "{args.dataset_name}"')
+        print(f'INTERMEDIATE_TAG = "{args.intermediate_tag}"')
+        print(f'FINAL_TAG = "{args.final_tag}"')
         
     except Exception as e:
         print(f"Error formatting dataset: {e}")

@@ -4,6 +4,7 @@ import torch
 from utils import extract_content, calculate_perplexity, extract_all_content, safe_wandb_log
 import pandas as pd
 import wandb
+from config import INTERMEDIATE_TAG, FINAL_TAG
 
 _ref_model = None
 _ref_tokenizer = None
@@ -13,7 +14,12 @@ def set_reference_model(model, tokenizer):
     _ref_model = model
     _ref_tokenizer = tokenizer
 
-def tag_format_reward(completions, **kwargs):
+def tag_format_reward(completions, intermediate_tag=None, final_tag=None, **kwargs):
+    if intermediate_tag is None:
+        intermediate_tag = INTERMEDIATE_TAG
+    if final_tag is None:
+        final_tag = FINAL_TAG
+        
     rewards = []
     
     tag_details = []
@@ -21,10 +27,10 @@ def tag_format_reward(completions, **kwargs):
     for completion in completions:
         reward = 0.0
         
-        reasoning_content = extract_content(completion, "think")
-        answer_content = extract_content(completion, "answer")
+        reasoning_content = extract_content(completion, intermediate_tag)
+        answer_content = extract_content(completion, final_tag)
         
-        expected = f"<think>{reasoning_content}</think><answer>{answer_content}</answer>"
+        expected = f"<{intermediate_tag}>{reasoning_content}</{intermediate_tag}><{final_tag}>{answer_content}</{final_tag}>"
         
         completion_no_whitespace = re.sub(r'\s+', '', completion)
         expected_no_whitespace = re.sub(r'\s+', '', expected)
@@ -95,11 +101,16 @@ def tag_format_reward(completions, **kwargs):
     
     return rewards
 
-def precompute_completion_data(completions, **kwargs):
+def precompute_completion_data(completions, intermediate_tag=None, final_tag=None, **kwargs):
     global _ref_model, _ref_tokenizer
     if _ref_model is None or _ref_tokenizer is None:
         raise ValueError("Reference model or tokenizer not initialized. Call set_reference_model() first.")
     
+    if intermediate_tag is None:
+        intermediate_tag = INTERMEDIATE_TAG
+    if final_tag is None:
+        final_tag = FINAL_TAG
+        
     prompt = kwargs.get("prompts", [""])[0]
     reference_answer = kwargs.get("reference", [""])[0] if "reference" in kwargs else ""
     question = prompt.split("Answer the question and return in the following format")[0] if "Answer the question and return in the following format" in prompt else prompt
@@ -107,15 +118,15 @@ def precompute_completion_data(completions, **kwargs):
     if not reference_answer or reference_answer == "":
         return [{"valid": False}] * len(completions), question, reference_answer, [float(0.5)] * len(completions)
     
-    tag_rewards = tag_format_reward(completions, **kwargs)
+    tag_rewards = tag_format_reward(completions, intermediate_tag=intermediate_tag, final_tag=final_tag, **kwargs)
     
     completion_data = []
     
     all_reasonings = []
     all_answers = []
     for completion in completions:
-        reasoning = extract_all_content(completion, "think")
-        answer = extract_content(completion, "answer")
+        reasoning = extract_all_content(completion, intermediate_tag)
+        answer = extract_content(completion, final_tag)
         all_reasonings.append(reasoning)
         all_answers.append(answer)
     

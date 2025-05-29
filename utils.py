@@ -4,13 +4,18 @@ import torch.nn.functional as F
 from transformers import PreTrainedModel, PreTrainedTokenizer
 import wandb
 import numpy as np
+from config import INTERMEDIATE_TAG, FINAL_TAG
 
-def extract_content(text: str, tag: str) -> str:
+def extract_content(text: str, tag: str = None) -> str:
+    if tag is None:
+        tag = FINAL_TAG
     pattern = f"<{tag}>(.*?)</{tag}>"
     match = re.search(pattern, text, re.DOTALL)
     return match.group(1).strip() if match else ""
 
-def extract_all_content(text: str, tag: str) -> list:
+def extract_all_content(text: str, tag: str = None) -> list:
+    if tag is None:
+        tag = INTERMEDIATE_TAG
     pattern = f"<{tag}>(.*?)</{tag}>"
     matches = re.findall(pattern, text, re.DOTALL)
     return [match.strip() for match in matches]
@@ -31,26 +36,33 @@ def calculate_perplexity(
     reasoning: str = "",
     target: str = "",
     use_natural_format: bool = False,
-    use_tagged_format: bool = True
+    use_tagged_format: bool = True,
+    intermediate_tag: str = None,
+    final_tag: str = None
 ) -> float:
+    if intermediate_tag is None:
+        intermediate_tag = INTERMEDIATE_TAG
+    if final_tag is None:
+        final_tag = FINAL_TAG
+        
     if use_tagged_format:
         prompt = f"""
 Question: {question}
 
 Answer the question and return in the following format:
 
-<think>
+<{intermediate_tag}>
 ...
-</think>
+</{intermediate_tag}>
 
-<answer>
+<{final_tag}>
 ...
-</answer>
+</{final_tag}>
 """
         if reasoning:
-            prompt = prompt + f"\n<think>\n{reasoning}\n</think>\n"
+            prompt = prompt + f"\n<{intermediate_tag}>\n{reasoning}\n</{intermediate_tag}>\n"
             
-        target = f"\n<answer>\n{target}\n</answer>"
+        target = f"\n<{final_tag}>\n{target}\n</{final_tag}>"
         
         combined = prompt + target
     elif use_natural_format:

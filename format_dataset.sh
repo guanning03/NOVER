@@ -14,8 +14,11 @@ if [ $# -eq 0 ]; then
     echo "  # Format local CSV file"
     echo "  ./format_dataset.sh data.csv --prompt-column question --reference-column answer"
     echo ""
-    echo "  # Format local JSONL file"
-    echo "  ./format_dataset.sh data.jsonl --prompt-column input --reference-column output"
+    echo "  # Format local JSONL file with custom tags"
+    echo "  ./format_dataset.sh data.jsonl --prompt-column input --reference-column output --intermediate-tag reasoning --final-tag solution"
+    echo ""
+    echo "  # Using different tags"
+    echo "  ./format_dataset.sh data.csv --intermediate-tag steps --final-tag result"
     echo ""
     echo "For more options, run: ./format_dataset.py --help"
     exit 1

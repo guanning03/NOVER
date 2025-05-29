@@ -59,7 +59,11 @@ class SyncRefLoraModelCallback(TrainerCallback):
 
 
 class CustomGRPOTrainer(GRPOTrainer):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, custom_tags=None, **kwargs):
+        self.custom_tags = custom_tags or {}
+        self.intermediate_tag = self.custom_tags.get("intermediate_tag", "think")
+        self.final_tag = self.custom_tags.get("final_tag", "answer")
+        
         super().__init__(*args, **kwargs)
 
         self.remove_callback(SyncRefModelCallback)
