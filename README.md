@@ -58,7 +58,20 @@ Answer the question and return in the following format:
 </answer>
 ```
 
-### Step 1: Weights & Biases Setup
+#### NOVER for ANY SFT DATA
+For convenience, you can use the included dataset formatter to automatically format your dataset:
+```bash
+# Format Hugging Face dataset
+./format_dataset.sh squad --prompt-column question --reference-column answers.text
+
+# Format CSV file
+./format_dataset.sh data.csv --prompt-column question --reference-column answer
+
+# Format JSONL file
+./format_dataset.sh data.jsonl --prompt-column input --reference-column output
+```
+
+### Step 2: Weights & Biases Setup
 
 Set up your Weights & Biases credentials:
 
@@ -67,7 +80,7 @@ export WANDB_API_KEY=your_api_key
 export WANDB_ENTITY=your_entity
 ```
 
-### Step 2: Start the VLLM Server
+### Step 3: Start the VLLM Server
 
 First, start the VLLM server for model rollouts:
 
@@ -77,7 +90,7 @@ sh run_vllm_server.sh
 
 This will launch a VLLM server using the model specified in `MODEL_NAME_VLLM` and the port specified in `VLLM_PORT`.
 
-### Step 3: Start Training
+### Step 4: Start Training
 
 After the VLLM server is running, start the training process:
 
@@ -131,6 +144,6 @@ If you find this work useful, please cite our paper:
 - [x] init for training code
 - [ ] upgrade to trl 0.17.0
 - [ ] cleaned NOVER data
-- [ ] support easier SFT data import
+- [x] support easier SFT data import
 - [ ] support inverse incentive training
 - [ ] support incentive steering
