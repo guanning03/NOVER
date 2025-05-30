@@ -2,6 +2,10 @@
   <img src="logo.png" alt="NOVER Logo" width="600">
 </div>
 
+<p align="center">
+    【📄 <a href="https://www.arxiv.org/pdf/2505.16022">arXiv</a> | 🤗 <a href="https://huggingface.co/papers/2505.16022">HuggingFace Papers</a> | 🧠 <a href="https://www.alphaxiv.org/abs/2505.16022">alphaArxiv</a>】
+</p>
+
 # NOVER: Incentive Training for Language Models via Verifier-Free Reinforcement Learning
 
 This is the official implementation of the paper ["NOVER: Incentive Training for Language Models via Verifier-Free Reinforcement Learning"](https://www.arxiv.org/pdf/2505.16022).
