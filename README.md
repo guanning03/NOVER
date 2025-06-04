@@ -8,7 +8,7 @@
 
 # NOVER: Incentive Training for Language Models via Verifier-Free Reinforcement Learning
 
-This is the official implementation of the paper ["NOVER: Incentive Training for Language Models via Verifier-Free Reinforcement Learning"](https://www.arxiv.org/pdf/2505.16022).
+This is the official implementation of the paper ["NOVER: Incentive Training for Language Models via Verifier-Free Reinforcement Learning"](https://www.arxiv.org/pdf/2505.16022). This code repo is built based on [HuggingFace trl](https://github.com/huggingface/trl).
 
 ## Overview
 
