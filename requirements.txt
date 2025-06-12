@@ -9,6 +9,7 @@ peft
 fastapi
 uvicorn
 vllm
+torch==2.6
 flash-attn
 deepspeed
 timeout_decorator

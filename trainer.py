@@ -25,6 +25,7 @@ from peft import get_peft_model_state_dict, set_peft_model_state_dict
 import os
 import json
 from datetime import datetime
+
 class SyncRefLoraModelCallback(TrainerCallback):
     def __init__(self, ref_model, accelerator, policy_model):
         self.accelerator = accelerator
@@ -56,7 +57,6 @@ class SyncRefLoraModelCallback(TrainerCallback):
             print(f"[ERROR] Failed to sync adapter: {e}")
             import traceback
             print(traceback.format_exc())
-
 
 class CustomGRPOTrainer(GRPOTrainer):
     def __init__(self, *args, custom_tags=None, **kwargs):
@@ -163,7 +163,6 @@ class CustomGRPOTrainer(GRPOTrainer):
             print("-"*50 + "\n")
 
         return loss
-
 
     def _generate_and_score_completions(
         self, inputs: dict[str, Union[torch.Tensor, Any]]
