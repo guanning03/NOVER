@@ -163,6 +163,7 @@ If you find this work useful, please cite our paper:
 - [x] support easier SFT data import
 - [x] support custom tags
 - [ ] upgrade to trl 0.17.0
-- [ ] cleaned NOVER data
+- [x] cleaned NOVER sampled data
+- [ ] cleaned NOVER full data
 - [ ] support inverse incentive training
 - [ ] support incentive steering
